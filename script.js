@@ -114,7 +114,7 @@ function image(v, I) {
 function rays(u) {
     ctx.setLineDash([0]);
     drawArrow(ctx, (lens.xo - u), lens.yo - 66, lens.xo, lens.yo, 2, 'black');
-    drawArrow(ctx, lens.xo, lens.yo, (lens.xo + (3 * u)), (lens.yo + 198), 2, 'black');
+    drawArrow(ctx, lens.xo, lens.yo, (lens.xo + (10 * u)), (lens.yo + 660), 2, 'black');
     drawArrow(ctx, (lens.xo - u), lens.yo - 66, lens.xo, lens.yo - 66, 2, 'black');
     drawArrow(ctx, lens.xo, lens.yo - 66, (lens.xo + 300), (lens.yo - 198), 2, 'black');
     ctx.setLineDash([5, 3]);
