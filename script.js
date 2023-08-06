@@ -1,12 +1,14 @@
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
 const slider = document.getElementById('myRange');
+const box = document.getElementById('option');
 var inputValue = 600;
 var v = 0;
 var I = 0;
-
+var value = 0;
 canvas.width = window.innerWidth - 100;
 canvas.height = window.innerHeight - 100;
+box.style.left = `${(canvas.width / 2) - 150}px`;
 const lens = {
     xo: canvas.width / 2,
     yo: canvas.height / 2,
@@ -34,7 +36,6 @@ function principalAxis() {
     ctx.stroke();
     ctx.closePath();
 }
-
 function points() {
     ctx.fillStyle = '#000';
     ctx.font = "20px serif";
@@ -99,34 +100,75 @@ function drawArrow(ctx, fromx, fromy, tox, toy, arrowWidth, color) {
     ctx.restore();
 }
 function objects(u) {
-    ctx.beginPath();
-    ctx.setLineDash([0]);
-    drawArrow(ctx, (canvas.width / 2) - u, lens.yo, (canvas.width / 2) - u, lens.yo - 66, 3, 'black');
-    ctx.closePath();
+    if (value == 0) {
+        ctx.beginPath();
+        ctx.setLineDash([0]);
+        drawArrow(ctx, (canvas.width / 2) - u, lens.yo, (canvas.width / 2) - u, lens.yo - 66, 3, 'black');
+        ctx.closePath();
+    } else if (value == 1) {
+        ctx.beginPath();
+        ctx.setLineDash([0]);
+        drawArrow(ctx, (canvas.width / 2) - u, lens.yo + 66, (canvas.width / 2) - u, lens.yo - 66, 3, 'black');
+        ctx.closePath();
+    }
 }
 function image(v, I) {
-    ctx.beginPath();
     ctx.setLineDash([5, 3]);
-    drawArrow(ctx, lens.xo - v, lens.yo, lens.xo - v, lens.yo - I, 3, 'black');
-    ctx.setLineDash([0]);
+    ctx.beginPath();
+    if (value == 0) {
+        ctx.beginPath();
+        drawArrow(ctx, lens.xo - v, lens.yo, lens.xo - v, lens.yo - I, 3, 'black');
+        ctx.closePath();
+    } else if (value == 1) {
+        ctx.beginPath();
+        drawArrow(ctx, lens.xo - v, lens.yo + I, lens.xo - v, lens.yo - I, 3, 'black');
+        ctx.closePath();
+    }
     ctx.closePath();
+    ctx.setLineDash([0]);
 }
 function rays(u) {
-    ctx.setLineDash([0]);
-    drawArrow(ctx, (lens.xo - u), lens.yo - 66, lens.xo, lens.yo, 2, 'black');
-    drawArrow(ctx, lens.xo, lens.yo, (lens.xo + (10 * u)), (lens.yo + 660), 2, 'black');
-    drawArrow(ctx, (lens.xo - u), lens.yo - 66, lens.xo, lens.yo - 66, 2, 'black');
-    drawArrow(ctx, lens.xo, lens.yo - 66, (lens.xo + 300), (lens.yo - 198), 2, 'black');
-    ctx.setLineDash([5, 3]);
-    ctx.beginPath();
-    ctx.moveTo(lens.xo - 200, lens.yo);
-    ctx.lineTo(lens.xo, lens.yo - 66);
-    ctx.stroke();
-    ctx.closePath();
-
+    if (value == 0) {
+        ctx.setLineDash([0]);
+        drawArrow(ctx, (lens.xo - u), lens.yo - 66, lens.xo, lens.yo, 2, 'black');
+        drawArrow(ctx, lens.xo, lens.yo, (lens.xo + (10 * u)), (lens.yo + 660), 2, 'black');
+        drawArrow(ctx, (lens.xo - u), lens.yo - 66, lens.xo, lens.yo - 66, 2, 'black');
+        drawArrow(ctx, lens.xo, lens.yo - 66, (lens.xo + 300), (lens.yo - 198), 2, 'black');
+        ctx.setLineDash([5, 3]);
+        ctx.beginPath();
+        ctx.moveTo(lens.xo - 200, lens.yo);
+        ctx.lineTo(lens.xo, lens.yo - 66);
+        ctx.stroke();
+        ctx.closePath();
+    }
+    else if (value == 1) {
+        ctx.setLineDash([0]);
+        drawArrow(ctx, (lens.xo - u), lens.yo - 66, lens.xo, lens.yo, 2, '#ab1e00');
+        drawArrow(ctx, lens.xo, lens.yo, (lens.xo + (10 * u)), (lens.yo + 660), 2, '#ab1e00');
+        drawArrow(ctx, (lens.xo - u), lens.yo - 66, lens.xo, lens.yo - 66, 2, '#ab1e00');
+        drawArrow(ctx, lens.xo, lens.yo - 66, (lens.xo + 300), (lens.yo - 198), 2, '#ab1e00');
+        drawArrow(ctx, (lens.xo - u), lens.yo + 66, lens.xo, lens.yo, 2, '#0014b8');
+        drawArrow(ctx, lens.xo, lens.yo, (lens.xo + (10 * u)), (lens.yo - 660), 2, '#0014b8');
+        drawArrow(ctx, (lens.xo - u), lens.yo + 66, lens.xo, lens.yo + 66, 2, '#0014b8');
+        drawArrow(ctx, lens.xo, lens.yo + 66, (lens.xo + 300), (lens.yo + 198), 2, '#0014b8');
+        ctx.setLineDash([5, 3]);
+        ctx.beginPath();
+        ctx.moveTo(lens.xo - 200, lens.yo);
+        ctx.lineTo(lens.xo, lens.yo - 66);
+        ctx.moveTo(lens.xo - 200, lens.yo);
+        ctx.lineTo(lens.xo, lens.yo + 66);
+        ctx.stroke();
+        ctx.closePath();
+    }
 }
 function update() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var data = document.getElementsByName("objectsinput");
+    for (var i = 0; i < data.length; i++) {
+        if (data[i].checked) {
+            value = data[i].value;
+        }
+    }
     slider.oninput = function () {
         inputValue = this.value;
         objects(this.value);
